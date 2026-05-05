@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useStore } from "@/lib/store";
 import { PageHeader } from "@/components/page-header";
+import { InboxTabs } from "@/components/inbox-tabs";
 
 const KIND_LABEL: Record<string, string> = {
   "shortfall-question": "Shortfall question",
@@ -21,7 +22,8 @@ export default function DraftsPage() {
 
   return (
     <div>
-      <PageHeader title="Drafts" subtitle="Pending your approval" />
+      <PageHeader title="Inbox" showToday />
+      <InboxTabs />
 
       {drafts.length === 0 ? (
         <div className="mt-12 text-center text-[14px] text-ink-mute">
@@ -82,12 +84,14 @@ export default function DraftsPage() {
         </ul>
       )}
 
-      <div className="mt-8 text-[12px] text-ink-faint">
-        Sent items live in each customer's conversation history.{" "}
-        <Link href="/customers" className="underline-offset-2 hover:underline">
-          Customers →
-        </Link>
-      </div>
+      {drafts.length > 0 && (
+        <div className="mt-8 text-[12px] text-ink-faint">
+          Sent items live in each customer's conversation history.{" "}
+          <Link href="/customers" className="underline-offset-2 hover:underline">
+            Customers →
+          </Link>
+        </div>
+      )}
     </div>
   );
 }

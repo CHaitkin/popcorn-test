@@ -122,36 +122,48 @@ function OrderRow({
   const lastArrival = arrivals.length ? arrivals[arrivals.length - 1] : null;
 
   return (
-    <li className="grid grid-cols-12 items-baseline gap-3 px-5 py-3 text-[13px]">
-      <div className="col-span-2 text-ink-mute tabular-nums">#{os.order.id}</div>
-      <div className="col-span-4">
-        <div className="text-ink">{os.order.sku}</div>
-        <div className="text-[12px] text-ink-mute">
-          {SKU_NAMES[os.order.sku]}
-        </div>
-      </div>
-      <div className="col-span-2 text-right tabular-nums text-ink">
-        {fmtYards(os.order.qty)}
-      </div>
-      <div className="col-span-2 text-ink-soft">
-        {fmtDate(os.order.promisedEta)}
-      </div>
-      <div
-        className={clsx(
-          "col-span-2 text-right text-[12px]",
-          os.isShortfall ? "text-warn" : "text-ink-mute",
-        )}
+    <li>
+      <Link
+        href={`/allocation?customer=${os.order.customerId}&order=${os.order.id}`}
+        className="grid grid-cols-12 items-baseline gap-3 px-5 py-3 text-[13px] transition-colors hover:bg-surface-subtle"
       >
-        {os.isShortfall ? (
-          <span>
-            {fmtYards(os.shortfall)} short
-          </span>
-        ) : lastArrival && lastArrival > os.order.promisedEta ? (
-          <span>Arrives {fmtDate(lastArrival)}</span>
-        ) : (
-          <span>Allocated</span>
-        )}
-      </div>
+        <div className="col-span-2 flex items-baseline gap-1.5 tabular-nums text-ink-mute">
+          {os.isShortfall && (
+            <span
+              aria-label="Shortfall"
+              title="Shortfall"
+              className="inline-block h-1.5 w-1.5 shrink-0 translate-y-[-1px] rounded-full bg-warn"
+            />
+          )}
+          <span>#{os.order.id}</span>
+        </div>
+        <div className="col-span-4">
+          <div className="text-ink">{os.order.sku}</div>
+          <div className="text-[12px] text-ink-mute">
+            {SKU_NAMES[os.order.sku]}
+          </div>
+        </div>
+        <div className="col-span-2 text-right tabular-nums text-ink">
+          {fmtYards(os.order.qty)}
+        </div>
+        <div className="col-span-2 text-ink-soft">
+          {fmtDate(os.order.promisedEta)}
+        </div>
+        <div
+          className={clsx(
+            "col-span-2 text-right text-[12px]",
+            os.isShortfall ? "text-warn" : "text-ink-mute",
+          )}
+        >
+          {os.isShortfall ? (
+            <span>{fmtYards(os.shortfall)} short</span>
+          ) : lastArrival && lastArrival > os.order.promisedEta ? (
+            <span>Arrives {fmtDate(lastArrival)}</span>
+          ) : (
+            <span>Allocated</span>
+          )}
+        </div>
+      </Link>
     </li>
   );
 }

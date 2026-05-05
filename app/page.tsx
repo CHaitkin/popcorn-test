@@ -4,6 +4,7 @@ import { useStore } from "@/lib/store";
 import { deriveInbox } from "@/lib/inbox";
 import { InboxItemView } from "@/components/inbox/items";
 import { PageHeader } from "@/components/page-header";
+import { InboxTabs } from "@/components/inbox-tabs";
 import { CONTAINERS, TODAY } from "@/lib/data";
 import { fmtDate } from "@/lib/format";
 
@@ -24,10 +25,11 @@ export default function InboxPage() {
     .filter((eta) => eta >= TODAY)
     .sort()[0];
 
-  if (items.length === 0) {
-    return (
-      <div>
-        <PageHeader title="Inbox" subtitle="Needs your judgment" showToday />
+  return (
+    <div>
+      <PageHeader title="Inbox" showToday />
+      <InboxTabs />
+      {items.length === 0 ? (
         <div className="mt-16 text-center text-[14px] text-ink-mute">
           All caught up.
           {upcoming && (
@@ -36,18 +38,13 @@ export default function InboxPage() {
             </span>
           )}
         </div>
-      </div>
-    );
-  }
-
-  return (
-    <div>
-      <PageHeader title="Inbox" subtitle="Needs your judgment" showToday />
-      <div className="space-y-2">
-        {items.map((item) => (
-          <InboxItemView key={item.id} item={item} />
-        ))}
-      </div>
+      ) : (
+        <div className="space-y-2">
+          {items.map((item) => (
+            <InboxItemView key={item.id} item={item} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
